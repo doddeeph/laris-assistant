@@ -1,7 +1,9 @@
 package id.laris.LarisAssistant.web.rest.twilio;
 
 import id.laris.LarisAssistant.service.twilio.TwilioService;
+import id.laris.LarisAssistant.service.twilio.dto.WebhookRequestForm;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -19,14 +21,11 @@ public class TwilioController {
         this.twilioService = twilioService;
     }
 
-    @PostMapping("/webhook")
+    @PostMapping(path = "/webhook", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public Mono<String> webhook(
             ServerHttpRequest request,
             @RequestHeader Map<String, String> requestHeader,
-            @RequestParam Map<String, String> requestParam) {
-        return Mono.defer(() -> {
-            String requestUrl = request.getURI().toString();
-            return twilioService.webhook(requestUrl, requestHeader, requestParam);
-        });
+            WebhookRequestForm requestForm) {
+        return twilioService.webhook(request, requestHeader, requestForm);
     }
 }

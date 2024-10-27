@@ -1,11 +1,11 @@
 package id.laris.LarisAssistant.service.twilio;
 
-import com.twilio.security.RequestValidator;
 import id.laris.LarisAssistant.service.openai.OpenAiService;
 import id.laris.LarisAssistant.service.twilio.dto.WebhookRequestHeader;
-import id.laris.LarisAssistant.service.twilio.dto.WebhookRequestParam;
+import id.laris.LarisAssistant.service.twilio.dto.WebhookRequestForm;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -24,13 +24,14 @@ public class TwilioService {
         this.openAiService = openAiService;
     }
 
-    public Mono<String> webhook(String requestUrl, Map<String, String> requestHeader, Map<String, String> requestParam) {
+    public Mono<String> webhook(ServerHttpRequest request, Map<String, String> requestHeader, WebhookRequestForm reqForm) {
         return Mono.defer(() -> {
             WebhookRequestHeader reqHeader = new WebhookRequestHeader(requestHeader);
-            WebhookRequestParam reqParam = new WebhookRequestParam(requestParam);
-            return Mono.just(isRequestValid(requestUrl, requestParam, reqHeader.getTwilioSignature()))
+            log.info("{}", reqHeader.toString());
+            log.info("{}", reqForm.toString());
+            return Mono.just(isRequestValid(request.getURI().toString(), null, reqHeader.getTwilioSignature()))
                     .flatMap(isValid -> isValid ?
-                            openAiService.getAssistantResponse(reqParam.getBody()) :
+                            openAiService.getAssistantResponse(reqForm.getBody()) :
                             Mono.just("[Twilio] Invalid request signature!"));
         });
     }
