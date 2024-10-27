@@ -19,7 +19,7 @@ public class TwilioController {
         this.twilioService = twilioService;
     }
 
-    @GetMapping("/webhook")
+    @PostMapping("/webhook")
     public Mono<String> webhook(
             ServerHttpRequest request,
             @RequestHeader Map<String, String> requestHeader,
