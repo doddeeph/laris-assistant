@@ -22,11 +22,8 @@ public class OpenAiService {
     @Value("${openai.api.key}")
     private String apiKey;
 
-    @Value("${openai.api.base-url}")
-    private String baseUrl;
-
-    @Value("${openai.api.uri}")
-    private String uri;
+    @Value("${openai.api.chat-completions-uri}")
+    private String chatCompletionsURI;
 
     @Value("${openai.api.model}")
     private String model;
@@ -41,13 +38,13 @@ public class OpenAiService {
     private String roleSystemMessage;
 
     public OpenAiService(WebClient.Builder builder) {
-        this.webClient = builder.baseUrl(baseUrl).build();
+        this.webClient = builder.baseUrl("https://api.openai.com").build();
     }
 
     public Mono<String> getAssistantResponse(String ask) {
         return webClient
                 .post()
-                .uri(uri)
+                .uri(chatCompletionsURI)
                 .header("Authorization", "Bearer " + apiKey)
                 .bodyValue(buildChatRequest(ask))
                 .retrieve()

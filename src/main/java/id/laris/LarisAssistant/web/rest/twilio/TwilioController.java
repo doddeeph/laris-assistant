@@ -2,10 +2,10 @@ package id.laris.LarisAssistant.web.rest.twilio;
 
 import id.laris.LarisAssistant.service.twilio.TwilioService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Log4j2
@@ -21,12 +21,12 @@ public class TwilioController {
 
     @GetMapping("/webhook")
     public Mono<String> webhook(
-            HttpServletRequest request,
+            ServerHttpRequest request,
             @RequestHeader Map<String, String> requestHeader,
             @RequestParam Map<String, String> requestParam) {
-        return twilioService.webhook(
-                request.getRequestURL().toString(),
-                requestHeader,
-                requestParam);
+        return Mono.defer(() -> {
+            String requestUrl = request.getURI().toString();
+            return twilioService.webhook(requestUrl, requestHeader, requestParam);
+        });
     }
 }

@@ -9,8 +9,7 @@ services:
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=dev
-      - OPENAI_API_BASE_URL=https://api.openai.com
-      - OPENAI_API_URI=/v1/chat/completions
+      - OPENAI_API_CHAT_COMPLETIONS_URI=/v1/chat/completions
       - OPENAI_API_MODEL=gpt-3.5-turbo
       - OPENAI_API_MAX_TOKEN=100
       - OPENAI_API_TEMPERATURE=0.7

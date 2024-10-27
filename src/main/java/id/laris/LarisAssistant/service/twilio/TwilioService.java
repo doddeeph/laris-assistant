@@ -31,7 +31,7 @@ public class TwilioService {
             return Mono.just(isRequestValid(requestUrl, requestParam, reqHeader.getTwilioSignature()))
                     .flatMap(isValid -> isValid ?
                             openAiService.getAssistantResponse(reqParam.getBody()) :
-                            Mono.just("Invalid request signature!"));
+                            Mono.just("[Twilio] Invalid request signature!"));
         });
     }
 
