@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: LarisAssistant
+
+server:
+  port: 8080
+
+twilio:
+  auth-token: ${TWILIO_AUTH_TOKEN}
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
+    base-url: ${OPENAI_API_BASE_URL}
+    uri: ${OPENAI_API_URI}
+    model: ${OPENAI_API_MODEL}
+    max-token: ${OPENAI_API_MAX_TOKEN}
+    temperature: ${OPENAI_API_TEMPERATURE}
+    role-system-message: ${OPENAI_API_ROLE_SYSTEM_MESSAGE}
