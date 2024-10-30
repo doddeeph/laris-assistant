@@ -16,3 +16,7 @@ openai:
     max-token: ${OPENAI_API_MAX_TOKEN}
     temperature: ${OPENAI_API_TEMPERATURE}
     role-system-message: ${OPENAI_API_ROLE_SYSTEM_MESSAGE}
+
+flowiseai:
+  api:
+    prediction-uri: ${FLOWISEAI_API_PREDICTION_URI}

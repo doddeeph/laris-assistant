@@ -1,6 +1,6 @@
 package id.laris.LarisAssistant.service.twilio;
 
-import id.laris.LarisAssistant.service.openai.OpenAiService;
+import id.laris.LarisAssistant.service.flowiseai.FlowiseAiService;
 import id.laris.LarisAssistant.service.twilio.dto.WebhookRequestHeader;
 import id.laris.LarisAssistant.service.twilio.dto.WebhookRequestForm;
 import lombok.extern.log4j.Log4j2;
@@ -15,13 +15,15 @@ import java.util.Map;
 @Service
 public class TwilioService {
 
-    private final OpenAiService openAiService;
+    private final FlowiseAiService flowiseAiService;
+//    private final OpenAiService openAiService;
 
     @Value("${twilio.auth-token}")
     private String authToken;
 
-    public TwilioService(OpenAiService openAiService) {
-        this.openAiService = openAiService;
+    public TwilioService(FlowiseAiService flowiseAiService) {
+//        this.openAiService = openAiService;
+        this.flowiseAiService = flowiseAiService;
     }
 
     public Mono<String> webhook(ServerHttpRequest request, Map<String, String> requestHeader, WebhookRequestForm reqForm) {
@@ -31,7 +33,8 @@ public class TwilioService {
             log.info("{}", reqForm.toString());
             return Mono.just(isRequestValid(request.getURI().toString(), null, reqHeader.getTwilioSignature()))
                     .flatMap(isValid -> isValid ?
-                            openAiService.getAssistantResponse(reqForm.getBody()) :
+                            flowiseAiService.prediction(reqForm.getBody()) :
+//                            openAiService.getAssistantResponse(reqForm.getBody()) :
                             Mono.just("[Twilio] Invalid request signature!"));
         });
     }
