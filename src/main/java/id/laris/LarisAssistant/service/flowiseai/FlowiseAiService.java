@@ -16,8 +16,11 @@ public class FlowiseAiService {
 
     private final WebClient webClient;
 
-    @Value("${flowiseai.api.prediction-uri}")
+    @Value("${flowiseai.api.prediction.uri}")
     private String predictionURI;
+
+    @Value("${flowiseai.api.prediction.id}")
+    private String predictionId;
 
     public FlowiseAiService(WebClient.Builder builder) {
         this.webClient = builder.baseUrl("http://117.53.144.144:3000").build();
@@ -26,7 +29,7 @@ public class FlowiseAiService {
     public Mono<String> prediction(String question) {
         return webClient
                 .post()
-                .uri(predictionURI)
+                .uri(predictionURI + predictionId)
                 .bodyValue(buildFlowiseAiRequest(question))
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response ->
