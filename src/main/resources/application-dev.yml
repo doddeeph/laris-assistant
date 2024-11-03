@@ -22,3 +22,10 @@ flowiseai:
     prediction:
       uri: ${FLOWISEAI_API_PREDICTION_URI}
       id: ${FLOWISEAI_API_PREDICTION_ID}
+
+logging:
+  level:
+    reactor:
+      netty:
+        http:
+          client: DEBUG
